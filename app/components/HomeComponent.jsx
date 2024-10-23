@@ -4,8 +4,8 @@ import { TouchableOpacity, StyleSheet, } from 'react-native';
 import { View, Text, Image } from 'react-native';
 
 
-const HomeComponent = () => {
-  const navigation = useNavigation();
+const HomeComponent = ({navigation}) => {
+  // const navigation = useNavigation();
 
   return (
     <View style={styles.container}>

@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, Stye } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, FlatList, Image, Button, TouchableOpacity } from 'react-native';
 
 const ListComponent = () => {
   const navigation = useNavigation();
   const [bikes, setBikes] = useState([]);
   const [selectedType, setSelectedType] = useState('All');
+  const [visibleCount, setVisibleCount] = useState(8);
 
   const handlePress = (item) => {
     navigation.navigate('Cart', { item });
@@ -22,6 +22,7 @@ const ListComponent = () => {
     };
   }, []);
   const filteredBikes = selectedType === 'All' ? bikes : bikes.filter(bike => bike.type === selectedType);
+  const visibleBikes = filteredBikes.slice(0, visibleCount);
 
   useEffect(() => {
     fetch ('https://671891927fc4c5ff8f49fcac.mockapi.io/test')
@@ -47,7 +48,7 @@ const ListComponent = () => {
       </View>
         <View>
         <FlatList
-        data={filteredBikes}
+        data={visibleBikes}
         numColumns={2}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handlePress(item)} style = {{
@@ -91,6 +92,9 @@ const ListComponent = () => {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
       />
+      {visibleCount < filteredBikes.length && (
+        <Button title="See More" onPress={() => setVisibleCount(visibleCount + 8)} />
+      )}
         </View>
       </View>
     </View>
